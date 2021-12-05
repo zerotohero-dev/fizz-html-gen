@@ -1,0 +1,63 @@
+<document>
+## Implement a Trie
+
+A **Trie** (*or prefix tree*) is a tree data structure used to efficiently store
+and retrieve keys in a dataset of strings. There are various applications of
+this data structure, such as **autocomplete** and **spell checker**.
+
+Implement a trie that supports the following use case:
+
+```go
+Trie trie = &Trie{}
+trie.Insert("apple")
+trie.Search("apple")   // return True
+trie.Search("app")     // return False
+trie.StartsWith("app") // return True
+trie.Insert("app")
+trie.search("app")     // return True
+```
+
+## Constraints
+
+* `1 <= word.length`, `prefix.length <= 2000`.
+* The `word` and `prefix` consist only of lowercase English letters.
+
+## Solution
+
+* [Trie Implementation](./trie/trie.go.html)
+
+## Helpers
+
+* [Driver Function](./main.go.html)
+* [Trie Node](./trie/node.go.html)
+
+## Further Discussion
+
+There are several other data structures, like **balanced trees** and **hash tables**,
+which allow us to search for a word in a dataset of strings. Then, why do we
+need tries?
+
+Here’s why.
+
+Although a hash table has `O(1)` time complexity for looking for a
+key, it is not efficient in the following operations, where a **trie** is a
+much better candidate:
+
+* Finding all keys with a common prefix.
+* Enumerating a dataset of strings in lexicographical order.
+
+
+Another reason why **trie** outperforms hash table is that as hash table
+increases in size we encounter more and more hash collisions. Eventually, the
+search time complexity could deteriorate to `O(n)`, where n is the number of
+keys inserted.
+
+A **trie**, on the other hand, does not suffer hash collisions. Moreover, it
+could use **less space** than a hash table when storing many keys with the
+same prefix. In this case, using a trie has only `O(m)` time complexity,
+where `m` is the key length—in comparison, searching for a key in a  balanced
+tree costs `O(m log(n))`, where `m` is the key length and `n` is the
+number of nodes on the tree.
+
+----
+</document>

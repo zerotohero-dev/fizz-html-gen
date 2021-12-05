@@ -1,0 +1,68 @@
+<document>
+## Preorder Traversal
+
+Here’s how the **preorder traversal** of a binary tree works:
+
+1. Visit the **current node**.
+2. Recursively traverse the current node’s **left subtree**.
+3. Recursively traverse the current node’s **right subtree**.
+
+The **preorder traversal** is a **topologically sorted** algorithm because a parent
+node is visited before any of its child nodes.
+
+Given the above description, implement the **preorder traversal** algorithm
+on a binary tree.
+
+## Solution
+
+* [Preorder Traversal Implementation](./impl.go.html)
+
+## Helpers
+
+* [Driver Function](./main.go.html)
+* [Tree Node](./node.go.html)
+* [Utilities](./helpers.go.html)
+
+## Further Discussion
+
+Let’s compare **preorder tree traversal** to a **depth-first search graph traversal**.
+
+[Check the `preorder()` function here](./impl.go.html) and compare the algorithm’s similarity
+with [DFS](../../003-dfs-bfs/dfs.go.html)—here’s the **DFS** pseudocude for reference:
+
+```text
+dfs(sv):
+  stack = []
+  stack.append(sv)
+  while stack:
+    v = stack.pop()
+    markAndVisit(v)
+    for nv in graph[v]:
+      if nv in marked: continue
+      stack.append(nv)
+```
+
+Let’s take the *“mark”* parts out of the algorithm (*indeed, we don’t need
+marking at all since a tree does not contain circular loops anyway*).
+
+When we get rid of markings, the above pseudocode turns into this:
+
+```text
+dfs(sv):
+  stack = []
+  stack.append(sv)
+  while stack:
+    v = stack.pop()
+    visit(v)
+    for nv in graph[v]:
+      stack.append(nv)
+```
+
+☝️ This is almost identical to the [preorder tree traversal algorithm](./impl.go.html).
+
+Also, note that **preorder**, **inorder**, and **postorder** tree traversals are
+**ALL** DFS (*Depth-First Search*) algorithms, whereas **level-order** tree
+traversal is a BFS (*Breadth-First Search*) algorithm.
+
+----
+</document>

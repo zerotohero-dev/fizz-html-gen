@@ -1,0 +1,33 @@
+<document>
+## Implement a Doubly-Linked List
+
+A **doubly-linked list** is a linked data structure that consists of a set of
+sequentially linked records called nodes. Each node contains three fields: two
+**link fields** (*references to the previous and to the next node in the sequence of
+nodes*) and one **data field**.
+
+Here’s the typical node structure of a doubly-linked list:
+
+```go
+type Node struct {
+	// Link fields
+	Prev *Node
+	Next *Node
+	// Data field
+	Value int
+}
+```
+
+Given the above description, implement a doubly-linked list.
+
+## Solution
+
+* [Linked List](./list.go.html)
+* [Linked List Node](./node.go.html)
+
+## Helpers
+
+* [Driver Function](./main.go.html)
+
+----
+</document>
