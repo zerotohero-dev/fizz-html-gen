@@ -18,6 +18,7 @@ FOLDERS=(
   "/concepts/005-preorder-traversal"
   "/concepts/006-inorder-traversal"
   "/concepts/007-inorder-successor"
+  "/concepts/008-postorder-traversal"
   "/warm-up/001-two-sum"
   "/warm-up/009-palindrome-number"
   "/warm-up/013-roman-to-integer"
@@ -54,7 +55,7 @@ rm -rf dist
 echo "4. Colorize 🦄"
 for FOLDER in "${FOLDERS[@]}"
 do
-  cd "$FIZZ_HTML_GEN_ROOT/hack/colorize$FOLDER" || {
+  cd "$FIZZ_HTML_GEN_ROOT/src$FOLDER" || {
     echo "Failed to cd into hack folder"; exit 1;
   }
   ./colorize.sh || {

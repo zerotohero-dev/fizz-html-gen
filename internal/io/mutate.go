@@ -23,8 +23,6 @@ import (
 func modifyDocs(filePath, fileContent string) string {
 	np := navPath(filePath)
 
-	fmt.Println("navPath", np)
-
 	b, err := ioutil.ReadFile(np)
 	if err != nil {
 		fmt.Print(err)
@@ -41,7 +39,6 @@ func modifyDocs(filePath, fileContent string) string {
 
 	newSource := ""
 	if hasNoNavigation {
-		fmt.Println("############ will inject document", filePath)
 		firstPreIndex := strings.Index(fileContent, "<pre>")
 		lastPreIndex := strings.LastIndex(fileContent, "</pre>")
 		newSource = fileContent[:firstPreIndex] + `<div class="preformatted">` + "\n" + navStr + "\n<span></span>" +
@@ -49,8 +46,6 @@ func modifyDocs(filePath, fileContent string) string {
 
 		newSource = strings.Replace(newSource, "<document>", `<div class="nav">`, 1)
 		newSource = strings.Replace(newSource, "</document>", "</div>", 1)
-	} else {
-		fmt.Println("############## will not inject document")
 	}
 
 	redundantHeadBlanksRegExp := regexp.MustCompile(`(?s)</style>.*</head>`)
@@ -98,7 +93,10 @@ const doToggle = (evt) => {
 
 func commonMutations(fileContent string) string {
 	htmlCommentRegExp := regexp.MustCompile(`(?s)<!--.*-->`)
-	fileContent = htmlCommentRegExp.ReplaceAllString(fileContent, scriptToInject)
+	fileContent = htmlCommentRegExp.ReplaceAllString(fileContent, "")
+
+	blankH2RegExp := regexp.MustCompile(`<h2></h2>`)
+	fileContent = blankH2RegExp.ReplaceAllString(fileContent, scriptToInject)
 
 	inlineCssRegExp := regexp.MustCompile(`(?s)<style type="text/css">.*</style>`)
 	fileContent = inlineCssRegExp.ReplaceAllString(fileContent, conf.InlineStyleToInject)
@@ -127,12 +125,25 @@ func commonMutations(fileContent string) string {
 		metaInjectionRegExp := regexp.MustCompile(
 			`<meta http-equiv="content-type" content="text/html; charset=utf-8">`,
 		)
-		fileContent = metaInjectionRegExp.ReplaceAllString(
-			fileContent,
+
+		fileContent = metaInjectionRegExp.ReplaceAllString(fileContent,
 			`<meta http-equiv="content-type" content="text/html; charset=utf-8">`+
-				`<meta name="viewport" content="width=device-width"><link rel="stylesheet" href="https://use.typekit.net/mqh5bnl.css">`,
+				`<meta name="viewport" content="width=device-width">`+
+				`<link rel="stylesheet" href="https://use.typekit.net/mqh5bnl.css">`,
 		)
 	}
+
+	postMetaInjectionRegExp := regexp.MustCompile(
+		`(?s)<link rel="stylesheet" ` +
+			`href="https://use.typekit.net/mqh5bnl.css">(.*)<style`,
+	)
+
+	fileContent = postMetaInjectionRegExp.ReplaceAllString(fileContent,
+		`<link rel="stylesheet" href="https://use.typekit.net/mqh5bnl.css"><style`)
+
+	postMetaInjectionRegExp = regexp.MustCompile(`(?s)</style>(.*)</head`)
+	fileContent = postMetaInjectionRegExp.ReplaceAllString(fileContent,
+		`</style></head`)
 
 	return fileContent
 }

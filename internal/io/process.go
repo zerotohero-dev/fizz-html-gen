@@ -1,7 +1,6 @@
 package io
 
 import (
-	"fmt"
 	"io/ioutil"
 	"regexp"
 	"strings"
@@ -16,9 +15,10 @@ func process(filePath string) error {
 	fileContent := commonMutations(string(b))
 
 	if isQuestionFile(filePath) {
-		fmt.Println("Found question file", filePath)
+		// Question file.
 		fileContent = modifyDocs(filePath, fileContent)
 	} else {
+		// Source code file.
 		preRegExp := regexp.MustCompile(`<pre>`)
 		if strings.Index(filePath, "index.html") == -1 {
 			fileContent = preRegExp.ReplaceAllString(
