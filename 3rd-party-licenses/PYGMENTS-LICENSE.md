@@ -8,6 +8,8 @@ The following text is the library’s LICENSE
 [pygments]: https://github.com/pygments/
 [pygments-license]: https://github.com/pygments/pygments/blob/master/LICENSE
 
+----
+
 Copyright (c) 2006-2021 by the respective authors (see AUTHORS file).
 All rights reserved.
 
