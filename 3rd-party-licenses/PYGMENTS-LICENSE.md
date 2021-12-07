@@ -1,8 +1,9 @@
 `fizz-html-gen` utilizes [`pygments`][pygments] to generate
 syntax-highlighted HTML files from source code.
 
-Here’s the library’s LICENSE—you can get a recent version of the
-license [from pygments GitHub repository][pygments-license] too.
+The following text is the library’s LICENSE 
+(you can get a recent version of it 
+[from pygments GitHub repository][pygments-license] too):
 
 [pygments]: https://github.com/pygments/
 [pygments-license]: https://github.com/pygments/pygments/blob/master/LICENSE
