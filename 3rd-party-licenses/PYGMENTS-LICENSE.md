@@ -2,8 +2,8 @@
 syntax-highlighted HTML files from source code.
 
 The following text is the library’s LICENSE 
-(you can get a recent version of it 
-[from pygments GitHub repository][pygments-license] too):
+(*you can get a recent version of it 
+[from pygments GitHub repository][pygments-license] too*):
 
 [pygments]: https://github.com/pygments/
 [pygments-license]: https://github.com/pygments/pygments/blob/master/LICENSE
