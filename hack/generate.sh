@@ -28,14 +28,31 @@ FOLDERS=(
   "/concepts"
 )
 
+echo "1. Preflight (env) 🦄"
+
+if [ -z "$FIZZ_BUZZ_DATA_ROOT" ]
+then
+   echo "FIZZ_BUZZ_DATA_ROOT is empty!"; exit 1;
+fi
+
+if [ -z "$FIZZ_HTML_GEN_ROOT" ]
+then
+   echo "FIZZ_HTML_GEN_ROOT is empty!"; exit 1;
+fi
+
+if [ -z "$FIZZ_WEB_ROOT" ]
+then
+   echo "FIZZ_WEB_ROOT is empty!"; exit 1;
+fi
+
 # Check data root exists.
-echo "1. Preflight (format) 🦄"
+echo "2. Preflight (dir/data) 🦄"
 cd "$FIZZ_BUZZ_DATA_ROOT" || {
   echo "Failed to cd into FIZZ_BUZZ_DATA_ROOT"; exit 1;
 }
 
 # Format all oft the source code in data root first.
-echo "2. Format 🦄"
+echo "3. Format 🦄"
 for FOLDER in "${FOLDERS[@]}"
 do
   cd "$FIZZ_BUZZ_DATA_ROOT$FOLDER" || {
@@ -45,14 +62,14 @@ do
 done
 
 # Remove the ./dist folder for a clean generation.
-echo "3. Cleanup dist 🦄"
+echo "4. Cleanup dist 🦄"
 cd "$FIZZ_HTML_GEN_ROOT" || {
   echo "Failed to cd into html gen root"; exit 1;
 }
 rm -rf dist
 
 # For each source code folder run the corresponding generator.
-echo "4. Colorize 🦄"
+echo "5. Colorize 🦄"
 for FOLDER in "${FOLDERS[@]}"
 do
   cd "$FIZZ_HTML_GEN_ROOT/src$FOLDER" || {
@@ -64,40 +81,33 @@ do
 done
 
 # Check the generator root exists.
-echo "5. Preflight (generate) 🦄"
+echo "6. Preflight (dir/generate) 🦄"
 cd "$FIZZ_HTML_GEN_ROOT" || {
   echo "Failed to cd into html gen root"; exit 1;
 }
 
-cp "$FIZZ_HTML_GEN_ROOT/src/index.html" "$FIZZ_HTML_GEN_ROOT/dist"
-
 # Make additional mutations on the generated files
 # on top of what `pygmentize` has already done.
-echo "6. Mutate 🦄"
+echo "7. Mutate 🦄"
 go run cmd/main.go
 
 # Check the dist folder has been (re)created.
-echo "7. Preflight dist 🦄"
+echo "8. Preflight (dir/dist) 🦄"
 cd "$FIZZ_HTML_GEN_ROOT/dist" || {
   echo "Failed to cd into the dist folder"; exit 1;
 }
 
-## Launch the generated ./dist/index.html
-#echo "8. Launch 🦄"
-#open "$FIZZ_HTML_GEN_ROOT/dist/index.html" || {
-#  echo "Failed to open the index page"; exit 1;
-#}
-
-mkdir -p "$FIZZ_HTML_GEN_ROOT/dist/login"
-cp "$FIZZ_HTML_GEN_ROOT/src/login/index.html" "$FIZZ_HTML_GEN_ROOT/dist/login"
-
+echo "9. Copy artifacts (/usr/local/share) 🦄"
 rm -rf /usr/local/share/fizz/dist
-cp -R "$FIZZ_HTML_GEN_ROOT/dist" "/usr/local/share/fizz"
+cp -R "$FIZZ_HTML_GEN_ROOT/dist" "/usr/local/share/fizz" || {
+  echo "Failed to copy generated files into /usr/local/share"; exit 1;
+}
 
+echo "10. Copy artifacts (FIZZ_WEB_ROOT) 🦄"
 rm -rf "$FIZZ_WEB_ROOT/usr/local/share/fizz"
 mkdir -p "$FIZZ_WEB_ROOT/usr/local/share/fizz"
-cp -R "$FIZZ_HTML_GEN_ROOT/dist" "$FIZZ_WEB_ROOT/usr/local/share/fizz"
-
-# /Users/volkan/Desktop/PROJECTS/fizz-web
+cp -R "$FIZZ_HTML_GEN_ROOT/dist" "$FIZZ_WEB_ROOT/usr/local/share/fizz" || {
+ echo "Failed to copy generated files into FIZZ_WEB_ROOT/usr/local/share"; exit 1;
+}
 
 echo "🦄 Everything Is Awesome 🦄"
