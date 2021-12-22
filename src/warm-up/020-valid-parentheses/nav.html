@@ -34,6 +34,112 @@ Output: false
 
 * [Driver Function](./main.go.html)
 
+## Further Discussion
+
+[**Stack**](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) is an excellent data structure for this problem.
+Let’s elaborate why.
+
+One way to think about how to solve this problem is to traverse the input string
+one character at a time; put the character you see to the stack, then proceed
+to the next character; if the next character is a closing parenthesis that
+matches the one you have on the stack, pop the item from the stack.
+
+Let’s try to visualize this to see why that makes sense.
+
+> **💁 Have Your Pen and Paper Ready**
+>
+> As always, it’s better to do this yourself using a pen and paper, or a
+> whiteboard.
+>
+> Jotting things down and visualizing them yourself will help you
+> understand things **your way**: Which is (*if you ask me*) is the **only**
+> way for something to make sense to you.
+
+To get started, let’s look at the expression below:
+
+```text
+{ [ [ ] { } ] } ( ) ( )
+```
+
+What if you scanned the expression from left to right, and whenever you
+encountered a matching closing parenthesis, you removed the opening/closing
+parentheses pair from the expression? `— [1]`
+
+Notice that parentheses close in reverse order (for, e.g., `{[( … )]}`)
+Observe that **the last parenthesis that opens closes first**: LIFO!
+
+So, intuitively, using a stack should work because stacks are LIFO data
+structures too.
+
+Here’s how the algorithm [1] would have proceeded with the above input
+expression (*`*`’s show matching parentheses*)
+
+```text
+{ [ [ ] { } ] } ( ) ( )
+{ [ * * { } ] } ( ) ( )
+{ [     * * ] } ( ) ( )
+{ *         * } ( ) ( )
+*             * ( ) ( )
+                * * ( )
+                    * *
+```
+
+So, where does the stack come in all these? Let’s see.
+
+Any opening parenthesis we encounter during our left-to-right scan can be
+marked for *“later processing”* and put onto a stack. Stack is a perfect data
+structure because those *“marked”* parentheses will be processed in reverse
+order (*the last one that opens has to close first*).
+
+When you see a closing parenthesis that matches what’s on top of the stack
+during the single-pass scan, you can pop the stack because you have a
+matching pair.
+
+Here’s how the above diagram would look like when we include the stack and
+add a few extra markers to clarify what the algorithm does at each step:
+
+```text
+( `^` shows where the pointer is at        )
+( `*` marks a matching opening parenthesis )
+
+ # ︙ Expression               ︙ Stack ︙ Comments
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 1.︙ { [ [ ] { } ] } ( ) ( )  ︙ { [ [ ︙ Add until you see a closing paren.
+   ︙     ^                    ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 2.︙ { [ [ ] { } ] } ( ) ( )  ︙ { [   ︙ Match found, pop stack.
+   ︙     * ^                  ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 3.︙ { [     { } ] } ( ) ( )  ︙ { [ { ︙ Add until you see a closing paren.
+   ︙         ^                ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 4.︙ { [     { } ] } ( ) ( )  ︙ { [   ︙ Match found, pop stack.
+   ︙         * ^              ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 5.︙ { [         ] } ( ) ( )  ︙ {     ︙ Another closing paren, pop stack.
+   ︙   *         ^            ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 6.︙ {             } ( ) ( )  ︙ #     ︙ Another closing paren, pop again.
+   ︙ *             ^          ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 7.︙                 ( ) ( )  ︙ (     ︙ Add until you see a closing paren.
+   ︙                 ^        ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 8.︙                 ( ) ( )  ︙ #     ︙ Match found, pop stack.
+   ︙                 * ^      ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+ 9.︙                     ( )  ︙ (     ︙ Add until you see a closing paren.
+   ︙                     ^    ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+10.︙                     ( )  ︙ #     ︙ Match found, pop stack.
+   ︙                     * ^  ︙       ︙
+᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁᠁
+```
+
+When you reach the end of the string, if your stack is empty, then it means
+that every closing parenthesis has a matching opening parenthesis, and thus
+your expression is valid.
+
 ----
 </document>
 

@@ -15,7 +15,7 @@ F="warm-up/001-two-sum"
 D="$D/$F"
 mkdir -p "$D"
 
-NAMES=("$F/doc.go"
+NAMES=("$F/doc.go" "$F/utils.go"
   "$F/impl-001.go" "$F/impl-002.go" "$F/impl-003.go"
   "$F/main.go")
 

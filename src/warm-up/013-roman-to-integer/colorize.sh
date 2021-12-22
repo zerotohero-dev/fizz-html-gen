@@ -15,6 +15,10 @@ F="warm-up/013-roman-to-integer"
 D="$D/$F"
 mkdir -p "$D"
 
-NAMES=("$F/doc.go" "$F/impl-001.go" "$F/impl-002.go" "$F/main.go")
+NAMES=(
+  "$F/doc.go"
+  "$F/impl-001.go" "$F/impl-002.go"  "$F/impl-003.go"
+  "$F/main.go"
+)
 
 "$FIZZ_HTML_GEN_ROOT/hack/colorize/pygmentize.sh" "${NAMES[@]}"
