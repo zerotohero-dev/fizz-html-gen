@@ -82,10 +82,22 @@ cd "$FIZZ_HTML_GEN_ROOT/dist" || {
   echo "Failed to cd into the dist folder"; exit 1;
 }
 
-# Launch the generated ./dist/index.html
-echo "8. Launch 🦄"
-open "$FIZZ_HTML_GEN_ROOT/dist/index.html" || {
-  echo "Failed to open the index page"; exit 1;
-}
+## Launch the generated ./dist/index.html
+#echo "8. Launch 🦄"
+#open "$FIZZ_HTML_GEN_ROOT/dist/index.html" || {
+#  echo "Failed to open the index page"; exit 1;
+#}
+
+mkdir -p "$FIZZ_HTML_GEN_ROOT/dist/login"
+cp "$FIZZ_HTML_GEN_ROOT/src/login/index.html" "$FIZZ_HTML_GEN_ROOT/dist/login"
+
+rm -rf /usr/local/share/fizz/dist
+cp -R "$FIZZ_HTML_GEN_ROOT/dist" "/usr/local/share/fizz"
+
+rm -rf "$FIZZ_WEB_ROOT/usr/local/share/fizz"
+mkdir -p "$FIZZ_WEB_ROOT/usr/local/share/fizz"
+cp -R "$FIZZ_HTML_GEN_ROOT/dist" "$FIZZ_WEB_ROOT/usr/local/share/fizz"
+
+# /Users/volkan/Desktop/PROJECTS/fizz-web
 
 echo "🦄 Everything Is Awesome 🦄"
