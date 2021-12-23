@@ -12,8 +12,8 @@
 package main
 
 import (
-	"github.com/zerotohero-def/fizz-html-gen/internal/conf"
-	"github.com/zerotohero-def/fizz-html-gen/internal/io"
+	"github.com/zerotohero-dev/fizz-html-gen/internal/conf"
+	"github.com/zerotohero-dev/fizz-html-gen/internal/io"
 	"log"
 	"path/filepath"
 )
