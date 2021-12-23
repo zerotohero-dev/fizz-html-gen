@@ -11,9 +11,7 @@
 
 package io
 
-import (
-	"os"
-)
+import "os"
 
 func Walk(filePath string, info os.FileInfo, err error) error {
 	if err != nil {

@@ -9,7 +9,7 @@
 #  (& )`   (,((,((;( ))\,
 #
 
-# Source code folders to generate html files off of.
+# Source code folders to generate HTML files from
 FOLDERS=(
   "/about"
   "/concepts/001-doubly-linked-list"
@@ -32,17 +32,17 @@ echo "1. Preflight (env) 🦄"
 
 if [ -z "$FIZZ_BUZZ_DATA_ROOT" ]
 then
-   echo "FIZZ_BUZZ_DATA_ROOT is empty!"; exit 1;
+  echo "FIZZ_BUZZ_DATA_ROOT is not defined!"; exit 1;
 fi
 
 if [ -z "$FIZZ_HTML_GEN_ROOT" ]
 then
-   echo "FIZZ_HTML_GEN_ROOT is empty!"; exit 1;
+  echo "FIZZ_HTML_GEN_ROOT is not defined!"; exit 1;
 fi
 
 if [ -z "$FIZZ_WEB_ROOT" ]
 then
-   echo "FIZZ_WEB_ROOT is empty!"; exit 1;
+  echo "FIZZ_WEB_ROOT is not defined!"; exit 1;
 fi
 
 # Check data root exists.
@@ -56,7 +56,7 @@ echo "3. Format 🦄"
 for FOLDER in "${FOLDERS[@]}"
 do
   cd "$FIZZ_BUZZ_DATA_ROOT$FOLDER" || {
-    echo "Failed to cd into data folder '$FOLDER'"; exit 1;
+     echo "Failed to cd into code folder '$FOLDER'!"; exit 1;
   }
   go fmt ./...
 done
@@ -73,10 +73,10 @@ echo "5. Colorize 🦄"
 for FOLDER in "${FOLDERS[@]}"
 do
   cd "$FIZZ_HTML_GEN_ROOT/src$FOLDER" || {
-    echo "Failed to cd into hack folder"; exit 1;
+     echo "Failed to cd into code folder '$FOLDER'!"; exit 1;
   }
   ./colorize.sh || {
-    echo "Failed to colorize folder '$FOLDER'"; exit 1;
+     echo "Failed to cd into colorize folder '$FOLDER'!"; exit 1;
   }
 done
 
@@ -89,7 +89,9 @@ cd "$FIZZ_HTML_GEN_ROOT" || {
 # Make additional mutations on the generated files
 # on top of what `pygmentize` has already done.
 echo "7. Mutate 🦄"
-go run cmd/main.go
+go run cmd/main.go || {
+  echo "Failed to run mutations."; exit 1;
+}
 
 # Check the dist folder has been (re)created.
 echo "8. Preflight (dir/dist) 🦄"

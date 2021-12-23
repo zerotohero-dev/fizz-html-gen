@@ -1,8 +1,19 @@
+/*
+ *  \
+ *  \\,
+ *   \\\,^,.,,.                     Zero to Hero
+ *   ,;7~((\))`;;,,               <zerotohero.dev>
+ *   ,(@') ;)`))\;;',    stay up to date, be curious: learn
+ *    )  . ),((  ))\;,
+ *   /;`,,/7),)) )) )\,,
+ *  (& )`   (,((,((;( ))\,
+ */
+
 package main
 
 import (
-	"fizz/internal/conf"
-	"fizz/internal/io"
+	"github.com/zerotohero-def/fizz-html-gen/internal/conf"
+	"github.com/zerotohero-def/fizz-html-gen/internal/io"
 	"log"
 	"path/filepath"
 )
@@ -11,6 +22,6 @@ func main() {
 	err := filepath.Walk(conf.ProjectRoot(), io.Walk)
 	if err != nil {
 		log.Println(err)
-		panic("Failed to update some of the generated HTMLs.")
+		panic("Failed to mutate some of the generated HTMLs.")
 	}
 }
